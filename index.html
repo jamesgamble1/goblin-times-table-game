@@ -13,7 +13,7 @@
     }
     .goblin {
       font-size: 24px;
-      margin: 20px;
+      margin: 10px;
       transition: transform 0.2s;
     }
     .goblin.hit {
@@ -54,6 +54,11 @@
       width: 200px;
       margin-bottom: 10px;
     }
+    #goblinImage {
+      width: 150px;
+      height: auto;
+      margin: 10px;
+    }
     #gameArea {
       display: none;
     }
@@ -75,6 +80,7 @@
     <div class="score-bar" id="score">Score: 0</div>
     <div class="score-bar" id="playerHp">Your HP: ❤️❤️❤️</div>
     <div class="goblin" id="goblinName">Goblin Appears...</div>
+    <img id="goblinImage" src="" alt="Goblin" />
     <div class="hp-bar" id="goblinHp">Goblin HP: ❤️❤️❤️❤️❤️</div>
     <div class="question" id="questionText">What's 3 × 4?</div>
     <input type="number" id="answer" onkeydown="if(event.key==='Enter') submitAnswer()" />
@@ -84,9 +90,15 @@
   </div>
 
   <script>
-    const goblinNames = [
-      "Grubnose the Gross", "Snaggletooth", "Mathcrusher",
-      "Fungus Frank", "Gibble the Gooey", "Wartface", "Zog the Slow"
+    const goblins = [
+      { name: "Grubnose the Gross", image: "https://openclipart.org/image/800px/295572" },
+      { name: "Snaggletooth", image: "https://openclipart.org/image/800px/216492" },
+      { name: "Mathcrusher", image: "https://openclipart.org/image/800px/216490" },
+      { name: "Fungus Frank", image: "https://openclipart.org/image/800px/216493" },
+      { name: "Wartface", image: "https://openclipart.org/image/800px/173791" },
+      { name: "Boogerbeard", image: "https://openclipart.org/image/800px/173793" },
+      { name: "Toadlicker Tim", image: "https://openclipart.org/image/800px/173792" },
+      { name: "Lumpy Larry", image: "https://openclipart.org/image/800px/173794" }
     ];
 
     let goblinHP = 5;
@@ -101,10 +113,6 @@
       document.getElementById("nameSection").style.display = "none";
       document.getElementById("gameArea").style.display = "block";
       updateGoblin();
-    }
-
-    function randomGoblin() {
-      return goblinNames[Math.floor(Math.random() * goblinNames.length)];
     }
 
     function randomQuestion() {
@@ -124,7 +132,9 @@
 
     function updateGoblin() {
       goblinHP = 5;
-      document.getElementById("goblinName").textContent = `${randomGoblin()} appears!`;
+      const goblin = goblins[Math.floor(Math.random() * goblins.length)];
+      document.getElementById("goblinName").textContent = `${goblin.name} appears!`;
+      document.getElementById("goblinImage").src = goblin.image;
       updateHPBar();
       updateQuestion();
       log(`${playerName}, a wild goblin appears! Solve fast!`);
@@ -151,7 +161,6 @@
         const bonus = timeTaken < 5 ? 2 : 1;
         goblinHP -= bonus;
         goblinElem.classList.add("hit");
-
         setTimeout(() => goblinElem.classList.remove("hit"), 400);
 
         if (goblinHP <= 0) {
