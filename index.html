@@ -26,56 +26,25 @@
       75% { transform: translateX(-10px); }
       100% { transform: translateX(0); }
     }
-    .question {
-      font-size: 32px;
-      margin: 20px;
-    }
-    input {
-      font-size: 24px;
-      padding: 10px;
-      width: 100px;
-    }
-    button {
-      font-size: 18px;
-      padding: 10px 20px;
-      margin-top: 10px;
-    }
-    .log {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #90ee90;
-    }
-    .hp-bar, .score-bar {
-      margin: 10px;
-    }
-    #playerNameInput {
-      font-size: 24px;
-      padding: 8px;
-      width: 200px;
-      margin-bottom: 10px;
-    }
-    #goblinImage {
-      width: 150px;
-      height: auto;
-      margin: 10px;
-    }
-    #gameArea {
-      display: none;
-    }
+    .question { font-size: 32px; margin: 20px; }
+    input { font-size: 24px; padding: 10px; width: 100px; }
+    button { font-size: 18px; padding: 10px 20px; margin-top: 10px; }
+    .log { margin-top: 20px; font-size: 16px; color: #90ee90; }
+    .hp-bar, .score-bar { margin: 10px; }
+    #playerNameInput { font-size: 24px; padding: 8px; width: 200px; margin-bottom: 10px; }
+    #goblinImage { width: 150px; height: auto; margin: 10px; }
+    #gameArea { display: none; }
   </style>
 </head>
 <body>
   <h1>🧌 Goblin Times Table Battle!</h1>
 
-  <!-- Name Input Section -->
   <div id="nameSection">
     <p>Enter your name, brave warrior:</p>
-    <input id="playerNameInput" type="text" placeholder="Your name..." />
-    <br>
+    <input id="playerNameInput" type="text" placeholder="Your name..." /><br>
     <button onclick="startGame()">Start Game</button>
   </div>
 
-  <!-- Game Area -->
   <div id="gameArea">
     <div class="score-bar" id="score">Score: 0</div>
     <div class="score-bar" id="playerHp">Your HP: ❤️❤️❤️</div>
@@ -91,48 +60,42 @@
 
   <script>
     const goblins = [
-      { name: "Grubnose the Gross", image: "https://openclipart.org/image/800px/295572" },
-      { name: "Snaggletooth", image: "https://openclipart.org/image/800px/216492" },
-      { name: "Mathcrusher", image: "https://openclipart.org/image/800px/216490" },
-      { name: "Fungus Frank", image: "https://openclipart.org/image/800px/216493" },
-      { name: "Wartface", image: "https://openclipart.org/image/800px/173791" },
-      { name: "Boogerbeard", image: "https://openclipart.org/image/800px/173793" },
-      { name: "Toadlicker Tim", image: "https://openclipart.org/image/800px/173792" },
-      { name: "Lumpy Larry", image: "https://openclipart.org/image/800px/173794" }
+      { name: "Grubnose the Gross", image: "/images/goblin1.png" },
+      { name: "Snaggletooth", image: "/images/goblin2.png" },
+      { name: "Mathcrusher", image: "/images/goblin3.png" },
+      { name: "Fungus Frank", image: "/images/goblin4.png" },
+      { name: "Wartface", image: "/images/goblin5.png" },
+      { name: "Boogerbeard", image: "/images/goblin6.png" },
+      { name: "Toadlicker Tim", image: "/images/goblin7.png" }, // club goblin from turn0image2 :contentReference[oaicite:6]{index=6}
+      { name: "Lumpy Larry", image: "/images/goblin8.png" }
     ];
 
-    let goblinHP = 5;
-    let playerHP = 3;
-    let score = 0;
-    let currentQuestion = {};
-    let startTime = 0;
-    let playerName = "";
+    let goblinHP=5, playerHP=3, score=0, currentQuestion={}, startTime=0, playerName="";
 
     function startGame() {
       playerName = document.getElementById("playerNameInput").value.trim() || "Hero";
-      document.getElementById("nameSection").style.display = "none";
-      document.getElementById("gameArea").style.display = "block";
+      document.getElementById("nameSection").style.display="none";
+      document.getElementById("gameArea").style.display="block";
       updateGoblin();
     }
 
     function randomQuestion() {
-      const a = Math.floor(Math.random() * 10) + 1;
-      const b = Math.floor(Math.random() * 10) + 1;
-      return { a, b, answer: a * b };
+      const a = Math.floor(Math.random()*10)+1;
+      const b = Math.floor(Math.random()*10)+1;
+      return { a, b, answer: a*b };
     }
 
     function updateQuestion() {
       currentQuestion = randomQuestion();
-      document.getElementById("questionText").textContent =
-        `What's ${currentQuestion.a} × ${currentQuestion.b}?`;
-      document.getElementById("answer").value = '';
+      document.getElementById("questionText").textContent = `What's ${currentQuestion.a} × ${currentQuestion.b}?`;
+      document.getElementById("answer").value='';
       document.getElementById("answer").focus();
-      startTime = new Date().getTime();
+      startTime = Date.now();
     }
 
     function updateGoblin() {
       goblinHP = 5;
-      const goblin = goblins[Math.floor(Math.random() * goblins.length)];
+      const goblin = goblins[Math.floor(Math.random()*goblins.length)];
       document.getElementById("goblinName").textContent = `${goblin.name} appears!`;
       document.getElementById("goblinImage").src = goblin.image;
       updateHPBar();
@@ -141,10 +104,8 @@
     }
 
     function updateHPBar() {
-      const goblinHearts = "❤️".repeat(goblinHP);
-      document.getElementById("goblinHp").textContent = `Goblin HP: ${goblinHearts}`;
-      const playerHearts = "❤️".repeat(playerHP);
-      document.getElementById("playerHp").textContent = `Your HP: ${playerHearts}`;
+      document.getElementById("goblinHp").textContent = "Goblin HP: " + "❤️".repeat(goblinHP);
+      document.getElementById("playerHp").textContent = "Your HP: " + "❤️".repeat(playerHP);
       document.getElementById("score").textContent = `Score: ${score}`;
     }
 
@@ -155,10 +116,10 @@
     function submitAnswer() {
       const goblinElem = document.getElementById("goblinName");
       const userAnswer = parseInt(document.getElementById("answer").value);
-      const timeTaken = (new Date().getTime() - startTime) / 1000;
+      const timeTaken = (Date.now() - startTime)/1000;
 
       if (userAnswer === currentQuestion.answer) {
-        const bonus = timeTaken < 5 ? 2 : 1;
+        const bonus = timeTaken<5 ? 2 : 1;
         goblinHP -= bonus;
         goblinElem.classList.add("hit");
         setTimeout(() => goblinElem.classList.remove("hit"), 400);
@@ -172,10 +133,10 @@
         }
       } else {
         playerHP--;
-        log(`Wrong! The goblin slaps you with a slimy fish. 🐟`);
+        log(`Wrong! The correct answer was ${currentQuestion.answer}. The goblin slaps you! 🐟`);
         if (playerHP <= 0) {
           log(`Game Over, ${playerName}! Final Score: ${score}`);
-          document.getElementById("gameArea").style.display = "none";
+          document.getElementById("gameArea").style.display="none";
           return;
         }
       }
