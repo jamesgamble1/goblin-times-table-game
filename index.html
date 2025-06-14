@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Goblin Times Table Battle</title>
+  <style>
+    body {
+      background: #1c1c1c;
+      color: #eee;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      padding: 30px;
+    }
+    .goblin {
+      font-size: 24px;
+      margin: 20px;
+    }
+    .question {
+      font-size: 32px;
+      margin: 20px;
+    }
+    input {
+      font-size: 24px;
+      padding: 10px;
+      width: 100px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+    .log {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #90ee90;
+    }
+    .hp-bar {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧌 Goblin Times Table Battle!</h1>
+  <div class="goblin" id="goblinName">Goblin Appears...</div>
+  <div class="hp-bar" id="goblinHp">Goblin HP: ❤️❤️❤️❤️❤️</div>
+  <div class="question" id="questionText">What's 3 × 4?</div>
+  <input type="number" id="answer" />
+  <br>
+  <button onclick="submitAnswer()">Attack!</button>
+  <div class="log" id="logText"></div>
+
+  <script>
+    const goblinNames = [
+      "Grubnose the Gross", "Snaggletooth", "Mathcrusher",
+      "Fungus Frank", "Gibble the Gooey", "Wartface", "Zog the Slow"
+    ];
+
+    let goblinHP = 5;
+    let currentQuestion = {};
+    let startTime = 0;
+
+    function randomGoblin() {
+      return goblinNames[Math.floor(Math.random() * goblinNames.length)];
+    }
+
+    function randomQuestion() {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      return { a, b, answer: a * b };
+    }
+
+    function updateQuestion() {
+      currentQuestion = randomQuestion();
+      document.getElementById("questionText").textContent =
+        `What's ${currentQuestion.a} × ${currentQuestion.b}?`;
+      document.getElementById("answer").value = '';
+      startTime = new Date().getTime();
+    }
+
+    function updateGoblin() {
+      goblinHP = 5;
+      document.getElementById("goblinName").textContent = `${randomGoblin()} appears!`;
+      updateHPBar();
+      updateQuestion();
+      log("A wild goblin appears! Solve fast!");
+    }
+
+    function updateHPBar() {
+      const hearts = "❤️".repeat(goblinHP);
+      document.getElementById("goblinHp").textContent = `Goblin HP: ${hearts}`;
+    }
+
+    function log(text) {
+      document.getElementById("logText").textContent = text;
+    }
+
+    function submitAnswer() {
+      const userAnswer = parseInt(document.getElementById("answer").value);
+      const timeTaken = (new Date().getTime() - startTime) / 1000;
+
+      if (userAnswer === currentQuestion.answer) {
+        const bonus = timeTaken < 5 ? 2 : 1;
+        goblinHP -= bonus;
+        if (goblinHP <= 0) {
+          log(`Correct! You defeated the goblin in ${timeTaken.toFixed(2)}s! 🎉`);
+          setTimeout(updateGoblin, 2000);
+        } else {
+          log(`Correct! You hit the goblin for ${bonus} damage.`);
+        }
+      } else {
+        log(`Wrong! The goblin slaps you with a slimy fish. 🐟`);
+      }
+
+      updateHPBar();
+      updateQuestion();
+    }
+
+    // Start the game
+    updateGoblin();
+  </script>
+</body>
+</html>
