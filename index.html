@@ -16,7 +16,7 @@
       margin: 20px;
     }
     .goblin img {
-      width: 200px;
+      width: 150px;
       height: auto;
     }
     .question {
@@ -50,20 +50,35 @@
       color: #888;
       margin-bottom: 10px;
     }
+    .start-screen img {
+      width: 200px;
+      height: auto;
+      margin: 20px auto;
+    }
   </style>
 </head>
 <body>
   <h1>🧌 Goblin Times Table Battle!</h1>
   <div class="version">Version 2</div>
-  <div class="lives" id="playerLives">Your Lives: ❤️❤️❤️</div>
-  <div class="goblin" id="goblinName">Goblin Appears...</div>
-  <div><img id="goblinImage" src="images/goblin1.png" alt="Goblin"></div>
-  <div class="hp-bar" id="goblinHp">Goblin HP: ❤️❤️❤️❤️❤️</div>
-  <div class="question" id="questionText">What's 3 × 4?</div>
-  <input type="number" id="answer" />
-  <br>
-  <button onclick="submitAnswer()">Attack!</button>
-  <div class="log" id="logText"></div>
+  <div class="start-screen" id="startScreen">
+    <img src="images/goblin_start.png" alt="Goblin Start">
+    <p>Enter your name to begin:</p>
+    <input type="text" id="playerNameInput" placeholder="Your Name" />
+    <br><br>
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <div id="gameScreen" style="display:none;">
+    <div class="lives" id="playerLives">Your Lives: ❤️❤️❤️</div>
+    <div class="goblin" id="goblinName">Goblin Appears...</div>
+    <div><img id="goblinImage" src="images/goblin1.png" alt="Goblin"></div>
+    <div class="hp-bar" id="goblinHp">Goblin HP: ❤️❤️❤️❤️❤️</div>
+    <div class="question" id="questionText">What's 3 × 4?</div>
+    <input type="number" id="answer" />
+    <br>
+    <button onclick="submitAnswer()">Attack!</button>
+    <div class="log" id="logText"></div>
+  </div>
 
   <script>
     const goblinNames = [
@@ -93,6 +108,13 @@
     let startTime = 0;
     let timeoutId;
 
+    function startGame() {
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("gameScreen").style.display = "block";
+      updateLives();
+      updateGoblin();
+    }
+
     function randomGoblin() {
       const i = Math.floor(Math.random() * goblinNames.length);
       document.getElementById("goblinImage").src = goblinImages[i];
@@ -116,7 +138,7 @@
       timeoutId = setTimeout(() => {
         loseLife("Too slow! The goblin attacks you for waiting too long!");
         updateQuestion();
-      }, 20000); // 20 seconds
+      }, 20000);
     }
 
     function updateGoblin() {
@@ -175,10 +197,6 @@
       updateHPBar();
       updateQuestion();
     }
-
-    // Start the game
-    updateLives();
-    updateGoblin();
   </script>
 </body>
 </html>
